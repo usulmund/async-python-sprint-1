@@ -10,6 +10,8 @@ from tasks import (
     DataAnalyzingTask,
 )
 
+from utils import CITIES
+
 GOOD_CITIES = [
     'CAIRO',
     'ABUDHABI',
@@ -39,6 +41,19 @@ BAD_CITIES_LIST = [
 def test_app_with_bed_data(bad_cities: list[str]):
     Service.init_logger()
     city_names = [city_name for city_name in bad_cities]
+    with ThreadPoolExecutor() as thread_pool:
+        thread_pool.map(
+            DataFetchingTask.get_data_by_city_name,
+            city_names,
+            timeout=20
+        )
+    Service.start_processes_for_calculation_and_agregation()
+    return DataAnalyzingTask.get_perfect_cities()
+
+
+def test_app_with_good_data():
+    Service.init_logger()
+    city_names = [city_name for city_name in CITIES]
     with ThreadPoolExecutor() as thread_pool:
         thread_pool.map(
             DataFetchingTask.get_data_by_city_name,
@@ -121,6 +136,12 @@ class AppTest(unittest.TestCase):
                 test_app_with_bed_data(bad_cities),
                 'ERROR'
             )
+
+    def test_app_with_good_data(self):
+        self.assertIn(
+            'ABUDHABI',
+            test_app_with_good_data(),
+        )
 
 
 if __name__ == "__main__":

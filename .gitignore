@@ -7,3 +7,4 @@ __pycache__/
 aggregate_data.csv
 data_for_analysis/*.json
 analyzer_result/*.json
+.coverage
