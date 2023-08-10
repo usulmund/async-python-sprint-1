@@ -5,5 +5,5 @@ __pycache__/
 *.pyc
 *.log
 aggregate_data.csv
-data_for_analysis/*
-analyzer_result/*
+data_for_analysis/*.json
+analyzer_result/*.json
