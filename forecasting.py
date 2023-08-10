@@ -1,28 +1,33 @@
-# import logging
-# import threading
-# import subprocess
-# import multiprocessing
+import logging
+import time
 
-
-from external.client import YandexWeatherAPI
 from tasks import (
-    DataFetchingTask,
-    DataCalculationTask,
-    DataAggregationTask,
+    Service,
     DataAnalyzingTask,
 )
-from utils import CITIES, get_url_by_city_name
 
 
 def forecast_weather():
-    """
-    Анализ погодных условий по городам
-    """
-    # city_name = "MOSCOW"
-    # url_with_data = get_url_by_city_name(city_name)
-    # resp = YandexWeatherAPI.get_forecasting(url_with_data)
-    # print(resp)
-    pass
+    Service.init_logger()
+
+    time_s = time.time()
+    Service.start_threads_for_data_fetching()
+    logging.info(
+        f"spent time on DataFetchingTask: {time.time() - time_s:.6f}s"
+    )
+
+    time_s = time.time()
+    Service.start_processes_for_calculation_and_agregation()
+    logging.info(
+        f"spent time on DataCalculationTask and DataAggregationTask: ' \
+        f'{time.time() - time_s:.6f}s"
+    )
+
+    time_s = time.time()
+    print(DataAnalyzingTask.get_perfect_cities())
+    logging.info(
+        f"spent time on DataAnalyzingTask: {time.time() - time_s:.6f}s"
+    )
 
 
 if __name__ == "__main__":

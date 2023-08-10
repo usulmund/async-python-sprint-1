@@ -208,7 +208,12 @@ if __name__ == "__main__":
     output_path = args.output
     verbose_mode = args.verbose
 
-    logging.basicConfig(level=logging.DEBUG if verbose_mode else logging.WARNING)
+    logging.basicConfig(
+        level=logging.DEBUG if verbose_mode else logging.WARNING,
+        filename='analyzer-log.log',
+        filemode='w',
+        format='%(asctime)s: %(name)s - %(levelname)s - %(message)s',
+        )
     logging.info(args)
 
     data = load_data(input_path)

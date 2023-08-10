@@ -3,3 +3,7 @@ creds.ini
 .idea/
 __pycache__/
 *.pyc
+*.log
+aggregate_data.csv
+data_for_analysis/*
+analyzer_result/*

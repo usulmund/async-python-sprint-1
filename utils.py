@@ -17,7 +17,7 @@ CITIES = {
 
     "GIZA": "https://code.s3.yandex.net/async-module/giza-response.json",
     "MADRID": "https://code.s3.yandex.net/async-module/madrid-response.json",
-    "TORONTO": "https://code.s3.yandex.net/async-module/toronto-response.json"
+    "TORONTO": "https://code.s3.yandex.net/async-module/toronto-response.json",
 }
 
 MIN_MAJOR_PYTHON_VER = 3
