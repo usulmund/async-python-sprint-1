@@ -38,28 +38,26 @@ BAD_CITIES_LIST = [
 ]
 
 
-def test_app_with_bed_data(bad_cities: list[str]):
-    Service.init_logger()
-    city_names = [city_name for city_name in bad_cities]
+def prepare_thread_pool(cities: list[str]):
+    city_names = [city_name for city_name in cities]
     with ThreadPoolExecutor() as thread_pool:
         thread_pool.map(
             DataFetchingTask.get_data_by_city_name,
             city_names,
             timeout=20
         )
+
+
+def app_with_bed_data(bad_cities: list[str]):
+    Service.init_logger()
+    prepare_thread_pool(bad_cities)
     Service.start_processes_for_calculation_and_agregation()
     return DataAnalyzingTask.get_perfect_cities()
 
 
-def test_app_with_good_data():
+def app_with_good_data():
     Service.init_logger()
-    city_names = [city_name for city_name in CITIES]
-    with ThreadPoolExecutor() as thread_pool:
-        thread_pool.map(
-            DataFetchingTask.get_data_by_city_name,
-            city_names,
-            timeout=20
-        )
+    prepare_thread_pool(CITIES)
     Service.start_processes_for_calculation_and_agregation()
     return DataAnalyzingTask.get_perfect_cities()
 
@@ -85,17 +83,17 @@ class AppTest(unittest.TestCase):
             f'Return code: {ret_code}'
         )
 
-    def test_get_new_format_data(self):
+    def test_convert_json_to_list(self):
         for city in GOOD_CITIES:
             self.assertNotEqual(
-                DataAggregationTask.get_new_format_data(city),
+                DataAggregationTask.convert_json_to_list(city),
                 [[None, None, 0]]
             )
 
-    def test_create_avg_data(self):
+    def test_create_stats_from_json(self):
         for city in GOOD_CITIES:
             self.assertNotEqual(
-                DataAggregationTask.create_avg_data(city),
+                DataAggregationTask.create_stats_from_json(city),
                 [city, None, 0]
             )
 
@@ -133,14 +131,14 @@ class AppTest(unittest.TestCase):
     def test_app_with_bed_data(self):
         for bad_cities in BAD_CITIES_LIST:
             self.assertEqual(
-                test_app_with_bed_data(bad_cities),
+                app_with_bed_data(bad_cities),
                 'ERROR'
             )
 
     def test_app_with_good_data(self):
         self.assertIn(
             'ABUDHABI',
-            test_app_with_good_data(),
+            app_with_good_data(),
         )
 
 
