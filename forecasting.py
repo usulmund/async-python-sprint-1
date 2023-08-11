@@ -7,6 +7,23 @@ from tasks import (
 )
 
 
+'''
+
+Если вы запускаете под MacOS и у вас выдает ошибку,
+запустите проект в Docker.
+
+Сборка контейнера с запуском программы:
+docker build -t async1 . --build-arg arg=run_app
+
+Сборка контейнера с тестированием:
+docker build -t async1 . --build-arg arg=test
+
+Старт контейнера:
+docker run async1
+
+'''
+
+
 def forecast_weather():
     Service.init_logger()
 
