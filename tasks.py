@@ -10,11 +10,13 @@ from time import sleep, time
 
 from utils import get_url_by_city_name
 from external.client import YandexWeatherAPI
+from settings import Settings
 from utils import CITIES
 
-AGGREGATION_TABLE = 'aggregate_data.csv'
-ANALYSER_DIR = 'analyzer_result'
-DATA_DIR = 'data_for_analysis'
+settings = Settings()
+AGGREGATION_TABLE = settings.AGGREGATION_TABLE
+ANALYSER_DIR = settings.ANALYSER_DIR
+DATA_DIR = settings.DATA_DIR
 
 city_for_calculation_queue: Queue = Queue()
 
@@ -157,7 +159,7 @@ class DataCalculationTask:
                 stdout=subprocess.PIPE,
                 universal_newlines=True
             )
-            output, error = analysis_process.communicate()
+            analysis_process.communicate()
             logging.info(
                 f'analyser put {city_name}'
             )
@@ -402,7 +404,6 @@ DataAnalyzingTask - класс для финального анализа и п�
 class DataAnalyzingTask:    # финальный анализ и получение результата
     @staticmethod
     def get_perfect_cities():
-        isCorrect = False
         with open(AGGREGATION_TABLE, encoding='utf-8') as aggreg_table:
             table = csv.reader(aggreg_table, delimiter=';')
             for row in table:
@@ -410,6 +411,4 @@ class DataAnalyzingTask:    # финальный анализ и получен�
                 rating = row[-1]
                 if rating == '1':
                     return f'Best choice:    {city}'
-                    isCorrect = True
-        if not isCorrect:
-            return 'ERROR'
+        return 'ERROR'

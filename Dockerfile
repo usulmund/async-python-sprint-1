@@ -2,6 +2,7 @@ ARG arg
 
 FROM python AS app
 COPY . .
+RUN pip install pydantic
 
 FROM app AS mode_run_app
 ENV file_name="./forecasting.py"
